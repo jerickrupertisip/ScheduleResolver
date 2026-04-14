@@ -38,6 +38,6 @@ List any Scheduling conflicts
 2. ### Ranked Tasks
 Rank which tasks need attention first based on the urgency, importance and energy, Provide a brief reason on each.
       ''';
-    }
+    } finally {}
   }
 }
