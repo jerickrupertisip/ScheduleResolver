@@ -1,6 +1,6 @@
-import "package:flutter/material.dart";
-import "package:schedule_resolver/models/task_model.dart";
-import "package:uuid/uuid.dart";
+import 'package:flutter/material.dart';
+import '../models/task_model.dart';
+import 'package:uuid/uuid.dart';
 
 class ScheduleProvider extends ChangeNotifier {
   final List<TaskModel> _tasks = [];
@@ -8,16 +8,15 @@ class ScheduleProvider extends ChangeNotifier {
 
   List<TaskModel> get tasks => _tasks;
 
-  void addTask({
-    required String id,
+  void AddTask({
     required String title,
     required String category,
     required DateTime date,
     required TimeOfDay startTime,
     required TimeOfDay endTime,
     required int urgency,
-    required double importance,
-    required double estimateEffortHours,
+    required int importance,
+    required double estimatedEffortHours,
     required String energyLevel,
   }) {
     final newTask = TaskModel(
@@ -29,10 +28,9 @@ class ScheduleProvider extends ChangeNotifier {
       endTime: endTime,
       urgency: urgency,
       importance: importance,
-      estimateEffortHours: estimateEffortHours,
+      estimatedEffortHours: estimatedEffortHours,
       energyLevel: energyLevel,
     );
-
     _tasks.add(newTask);
     notifyListeners();
   }

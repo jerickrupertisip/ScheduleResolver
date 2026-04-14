@@ -1,6 +1,6 @@
-import "package:flutter/material.dart";
-import "package:provider/provider.dart";
-import "../providers/schedule_provider.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/schedule_provider.dart';
 
 class TaskInputScreen extends StatefulWidget {
   const TaskInputScreen({super.key});
@@ -12,18 +12,18 @@ class TaskInputScreen extends StatefulWidget {
 class _TaskInputScreenState extends State<TaskInputScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String _title = "";
-  String _category = "Class";
+  String _title = '';
+  String _category = 'Class';
   DateTime _date = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now().replacing(
     hour: TimeOfDay.now().hour + 1,
   );
   double _urgency = 3, _importance = 3, _effort = 1.0;
-  String _energy = "Medium";
+  String _energy = 'Medium';
 
-  final List<String> _cats = ["Class", "Org Work", "Study", "Rest", "Other"];
-  final List<String> _energies = ["Low", "Medium", "High"];
+  final List<String> _cats = ['Class', 'Org Work', 'Study', 'Rest', 'Other'];
+  final List<String> _energies = ['Low', 'Medium', 'High'];
 
   Future<void> _pickTime(bool isStart) async {
     final picked = await showTimePicker(
@@ -37,17 +37,16 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      Provider.of<ScheduleProvider>(context, listen: false).addTask(
+      Provider.of<ScheduleProvider>(context, listen: false).AddTask(
         title: _title,
         category: _category,
         date: _date,
         startTime: _startTime,
         endTime: _endTime,
         urgency: _urgency.toInt(),
-        importance: _importance,
-        estimateEffortHours: _effort,
+        importance: _importance.toInt(),
+        estimatedEffortHours: _effort,
         energyLevel: _energy,
-        id: "task_id",
       );
       Navigator.pop(context);
     }
@@ -56,7 +55,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Task")),
+      appBar: AppBar(title: const Text('Add Task')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -66,7 +65,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
             children: [
               TextFormField(
                 decoration: const InputDecoration(
-                  labelText: "Task Title",
+                  labelText: 'Task Title',
                   border: OutlineInputBorder(),
                 ),
                 onSaved: (value) => _title = value!,
@@ -75,7 +74,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
               DropdownButtonFormField<String>(
                 value: _category,
                 decoration: const InputDecoration(
-                  labelText: "Category",
+                  labelText: 'Category',
                   border: OutlineInputBorder(),
                 ),
                 items: _cats
@@ -104,7 +103,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              const Text("Urgency (1 = Low, 5 = High)"),
+              const Text('Urgency (1 = Low, 5 = High)'),
               Slider(
                 value: _urgency,
                 min: 1,
@@ -113,7 +112,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
                 label: _urgency.round().toString(),
                 onChanged: (val) => setState(() => _urgency = val),
               ),
-              const Text("Importance (1 = Low, 5 = High)"),
+              const Text('Importance (1 = Low, 5 = High)'),
               Slider(
                 value: _importance,
                 min: 1,
@@ -126,7 +125,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
               DropdownButtonFormField<String>(
                 value: _energy,
                 decoration: const InputDecoration(
-                  labelText: "Energy Level",
+                  labelText: 'Energy Level',
                   border: OutlineInputBorder(),
                 ),
                 items: _energies
@@ -137,7 +136,7 @@ class _TaskInputScreenState extends State<TaskInputScreen> {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text("Add Task to Timeline"),
+                child: const Text('Add Task to Timeline'),
               ),
             ],
           ),

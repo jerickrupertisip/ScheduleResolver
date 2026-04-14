@@ -1,88 +1,92 @@
-import "package:flutter/material.dart";
-import "package:provider/provider.dart";
-import "../providers/schedule_provider.dart";
-import "../services/ai_schedule_service.dart";
-import "../models/task_model.dart";
-import "task_input_screen.dart";
-import "recommendation_screen.dart";
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:schedule_resolver/screens/task_input_screen.dart';
+import '../providers/schedule_provider.dart';
+import '../services/ai_schedule_service.dart';
+import '../models/task_model.dart';
+import 'recommendation_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     final scheduleProvider = Provider.of<ScheduleProvider>(context);
     final aiService = Provider.of<AiScheduleService>(context);
 
-    final sortedTasks = List<TaskModel>.from(scheduleProvider.tasks);
-    sortedTasks.sort((a, b) => a.startTime.hour.compareTo(b.startTime.hour));
+    final sortedTask = List<TaskModel>.from(scheduleProvider.tasks);
+    sortedTask.sort((a, b) => a.startTime.hour.compareTo(b.startTime.hour));
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Schedule Resolver"), centerTitle: true),
+      appBar: AppBar(title: const Text('Schedule Resolver'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            const SizedBox(height: 16),
             if (aiService.currentAnalysis != null)
               Card(
-                color: Colors.green.shade100,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        "🎉 Recommendation Ready!",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const RecommendationScreen(),
-                          ),
+                color: Colors.red.shade100,
+                child: Column(
+                  children: [
+                    const Text(
+                      'Recommendation Ready!!',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const RecommendationScreen(),
                         ),
-                        child: const Text("View Recommendations"),
                       ),
-                    ],
-                  ),
+                      child: const Text('View Recommendation'),
+                    ),
+                  ],
                 ),
               ),
             const SizedBox(height: 16),
             Expanded(
-              child: sortedTasks.isEmpty
-                  ? const Center(child: Text("No tasks added yet!"))
+              child: sortedTask.isEmpty
+                  ? const Center(child: Text('no task added yet!'))
                   : ListView.builder(
-                      itemCount: sortedTasks.length,
+                      itemCount: sortedTask.length,
                       itemBuilder: (context, index) {
-                        final task = sortedTasks[index];
+                        final task = sortedTask[index];
                         return Card(
                           child: ListTile(
                             title: Text(task.title),
                             subtitle: Text(
-                              "${task.category} | ${task.startTime.hour}:${task.startTime.minute}",
+                              "${task.category} | ${task.startTime.hour}: ${task.startTime.minute}",
                             ),
                             trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.black,
+                              ),
                               onPressed: () =>
                                   scheduleProvider.removeTask(task.id),
-                            ),
+                            ), // IconButton
                           ),
                         );
                       },
                     ),
             ),
-            if (sortedTasks.isNotEmpty)
+
+            if (sortedTask.isNotEmpty)
               ElevatedButton(
                 onPressed: aiService.isLoading
                     ? null
-                    : () => aiService.analyzeSchedule(sortedTasks),
+                    : () => aiService.analyzeSchedule(scheduleProvider.tasks),
                 child: aiService.isLoading
                     ? const CircularProgressIndicator()
-                    : const Text("Resolve Conflicts With AI"),
+                    : const Text('Resolved Conflicts With AI'),
               ),
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
           context,
