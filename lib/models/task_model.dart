@@ -9,7 +9,7 @@ class TaskModel {
   final TimeOfDay endTime;
   final int urgency;
   final double importance;
-  final String estimateEffortHours;
+  final double estimateEffortHours;
   final String energyLevel;
 
   TaskModel({

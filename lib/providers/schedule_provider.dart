@@ -17,7 +17,7 @@ class ScheduleProvider extends ChangeNotifier {
     required TimeOfDay endTime,
     required int urgency,
     required double importance,
-    required String estimateEffortHours,
+    required double estimateEffortHours,
     required String energyLevel,
   }) {
     final newTask = TaskModel(
